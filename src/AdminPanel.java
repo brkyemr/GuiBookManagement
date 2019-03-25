@@ -15,6 +15,7 @@ public class AdminPanel extends javax.swing.JFrame {
      */
     public AdminPanel() {
         initComponents();
+        this.setVisible(true);
     }
 
     /**
@@ -130,7 +131,12 @@ public class AdminPanel extends javax.swing.JFrame {
         String password = new String (passwordField.getPassword());
     boolean result = operations.Login(id,password);
         if(result == true){
+             BookArchive bookarchive = new BookArchive(this,true);
+             
              messageLabel.setText("Loging Succesfull");
+             setVisible(false); //admin paneli kapanır
+             bookarchive.setVisible(result);
+             System.exit(0);
         }
         else{
             messageLabel.setText("Couldn't Login");
