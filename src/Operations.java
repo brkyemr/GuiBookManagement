@@ -20,7 +20,7 @@ public class Operations {
     
     public Operations(){
         
-        String url = "jdbc:mysql://"+Database.host+":"+Database.port+"/"+Database.db_name;
+        String url = "jdbc:mysql://"+Database.host+":"+Database.port+"/"+Database.db_name+"?useUnicode=true&characterEncoding=UTF-8";
         
        try{
            
@@ -50,6 +50,65 @@ public class Operations {
             return false;
         }
     
+        
+    }
+    public void bookAdd(String name, String writer, String type ,String publisher ){
+        String sorgu;
+        sorgu = "INSERT INTO `books_database`(`book_name`, `book_writer`, `book_type`, `book_publisher`) VALUES (?,?,?,?)";
+        try {
+            prepsta = con.prepareStatement(sorgu);
+            prepsta.setString(1,name);
+            prepsta.setString(2,writer);
+            prepsta.setString(3,type);
+            prepsta.setString(4,publisher);
+            prepsta.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void bookUpdate(int id,String name, String writer, String type ,String publisher ){
+        String sorgu = "UPDATE books_database SET book_name=?,book_writer=?,book_type=?,book_publisher=? WHERE id=?";
+        try {
+            prepsta = con.prepareStatement(sorgu);
+            prepsta.setString(1,name);
+            prepsta.setString(2,writer);
+            prepsta.setString(3,type);
+            prepsta.setString(4,publisher);
+            prepsta.setInt(5,id);
+            prepsta.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    public void bookDelete(int id){
+        String sorgu ="DELETE FROM books_database WHERE id = ?";
+        try {
+            prepsta = con.prepareStatement(sorgu);
+            prepsta.setInt(1,id);
+            prepsta.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    public int bookCount(){
+        int label = 0;
+        String sorgu = "Select count(*) from books_database"; 
+       try{ 
+        sta = con.createStatement();
+        ResultSet rs = sta.executeQuery(sorgu);
+        rs.next();
+        label = rs.getInt(1);
+        
+       }
+       catch(SQLException e){
+           System.out.println("Book counter sql exception");
+       return 0;
+       }
+        return label;
         
     }
     public ArrayList<Book> bookGet(){
